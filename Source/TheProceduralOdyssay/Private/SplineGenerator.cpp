@@ -24,7 +24,7 @@ void ASplineGenerator::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-TArray<FVector> ASplineGenerator::GenerateCircularSplineVector3D(int32 NumOfPoints, float Radius)
+TArray<FVector> ASplineGenerator::GenerateCircularSplineVector3D(const int32 NumOfPoints, const float Radius, const FRandomStream Seed, const int32 PointDeviation)
 {
 	TArray<FVector> SplinePoints;
 
@@ -35,11 +35,12 @@ TArray<FVector> ASplineGenerator::GenerateCircularSplineVector3D(int32 NumOfPoin
 	}
 
 	const float AngleIncrement = 360.0f / static_cast<float>(NumOfPoints - 1);
-	for (int32 PointIndex = 0; PointIndex < NumOfPoints; ++PointIndex)
+	for (int32 PointIndex = 0; PointIndex < NumOfPoints - 1; ++PointIndex)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("SEED RAND: %f"), Seed.FRand()));
 		const float AngleInRad = FMath::DegreesToRadians(AngleIncrement * PointIndex);
-		const float X = FMath::Cos(AngleInRad) * (Radius + (rand() % 1000));
-		const float Y = FMath::Sin(AngleInRad) * (Radius + (rand() % 1000));
+		const float X = FMath::Cos(AngleInRad) * (Radius + Seed.RandRange(0, PointDeviation));
+		const float Y = FMath::Sin(AngleInRad) * (Radius + Seed.RandRange(0, PointDeviation));
 
 		SplinePoints.Add(FVector(X, Y, 0.0f));
 	}

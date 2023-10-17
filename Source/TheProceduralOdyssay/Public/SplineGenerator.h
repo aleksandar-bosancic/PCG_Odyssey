@@ -24,5 +24,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category="Spline")
-	static TArray<FVector> GenerateCircularSplineVector3D(int32 NumOfPoints, float Radius);
+	static TArray<FVector> GenerateCircularSplineVector3D(int32 NumOfPoints, float Radius, FRandomStream Seed, int32 PointDeviation);
 };
